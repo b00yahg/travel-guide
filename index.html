@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>D&D Travel Planner</title>
+    <!-- Import fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <!-- Import Tailwind -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        :root {
+            --primary-dark: #2a3f2b;
+            --primary-medium: #3c5a3e;
+            --primary-light: #5c8a5f;
+            --bg-main: #e6d8b5;
+            --bg-container: #f0e6c8;
+            --bg-content: #f9f3e3;
+            --accent-danger: #8a5c5c;
+            --accent-highlight: #ffd700;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--primary-dark);
+        }
+
+        h1, h2, h3, button {
+            font-family: 'Uncial Antiqua', cursive;
+        }
+
+        .main-container {
+            background-color: var(--bg-container);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .stage-container {
+            background-color: var(--bg-content);
+            border: 2px solid var(--primary-medium);
+            border-radius: 5px;
+            margin: 20px 0;
+            padding: 20px;
+        }
+
+        .input-field {
+            background: var(--bg-container);
+            border: 1px solid var(--primary-light);
+            border-radius: 4px;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .fancy-button {
+            background-color: var(--primary-light);
+            color: var(--bg-content);
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .fancy-button:hover {
+            background-color: var(--primary-medium);
+            transform: scale(1.02);
+        }
+
+        .info-box {
+            border-left: 3px solid var(--primary-light);
+            padding-left: 10px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1 class="text-3xl text-center mb-6">Travel Planner</h1>
+        
+        <!-- Journey Overview -->
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+                <label>Origin:</label>
+                <input type="text" class="input-field" id="origin">
+            </div>
+            <div>
+                <label>Destination:</label>
+                <input type="text" class="input-field" id="destination">
+            </div>
+        </div>
+
+        <!-- Party Information -->
+        <div class="mb-6">
+            <h3 class="text-xl mb-2">Party Information</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label>Number of Party Members:</label>
+                    <input type="number" class="input-field" id="partySize" min="1">
+                </div>
+                <div>
+                    <label>Rations Available:</label>
+                    <div class="flex items-center">
+                        <button class="fancy-button" onclick="adjustRations(-1)">-</button>
+                        <input type="number" class="input-field mx-2" id="rations" value="0" readonly>
+                        <button class="fancy-button" onclick="adjustRations(1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stages Container -->
+        <div id="stages-container"></div>
+
+        <!-- Add Stage Button -->
+        <button class="fancy-button w-full mb-6" onclick="addStage()">Add New Stage</button>
+
+        <!-- Reference Tables -->
+        <div class="mb-6">
+            <h3 class="text-xl mb-2">Quick Reference</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Terrain DCs -->
+                <div class="info-box">
+                    <h4>Terrain DCs</h4>
+                    <div id="terrainDCs"></div>
+                </div>
+                <!-- Weather Table -->
+                <div class="info-box">
+                    <h4>Weather Conditions</h4>
+                    <div id="weatherTable"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save/Load Buttons -->
+        <div class="grid grid-cols-3 gap-4">
+            <button class="fancy-button" onclick="saveData()">Save Journey</button>
+            <button class="fancy-button" onclick="loadData()">Load Journey</button>
+            <button class="fancy-button" onclick="exportToMD()">Export to MD</button>
+        </div>
+    </div>
+
+    <script>
+        // Stage template
+        function createStageTemplate(stageNum) {
+            return `
+                <div class="stage-container" id="stage-${stageNum}">
+                    <h3 class="text-xl mb-4">Stage ${stageNum}</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label>Start:</label>
+                            <input type="text" class="input-field" id="start-${stageNum}">
+                        </div>
+                        <div>
+                            <label>End:</label>
+                            <input type="text" class="input-field" id="end-${stageNum}">
+                        </div>
+                        <div>
+                            <label>Distance (miles):</label>
+                            <input type="number" class="input-field" id="distance-${stageNum}">
+                        </div>
+                        <div>
+                            <label>Terrain:</label>
+                            <select class="input-field" id="terrain-${stageNum}" onchange="updateTerrainInfo(${stageNum})">
+                                <option value="arctic">Arctic</option>
+                                <option value="coastal">Coastal</option>
+                                <option value="desert">Desert</option>
+                                <option value="forest">Forest</option>
+                                <option value="grassland">Grassland</option>
+                                <option value="hill">Hill</option>
+                                <option value="mountain">Mountain</option>
+                                <option value="swamp">Swamp</option>
+                                <option value="underdark">Underdark</option>
+                                <option value="urban">Urban</option>
+                                <option value="waterborne">Waterborne</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Weather -->
+                    <div class="mb-4">
+                        <h4 class="text-lg mb-2">Weather</h4>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div>
+                                <label>Temperature:</label>
+                                <select class="input-field" id="temp-${stageNum}">
+                                    <option value="normal">Normal for season</option>
+                                    <option value="cold">Colder</option>
+                                    <option value="hot">Hotter</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Wind:</label>
+                                <select class="input-field" id="wind-${stageNum}">
+                                    <option value="none">None</option>
+                                    <option value="light">Light</option>
+                                    <option value="strong">Strong</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Precipitation:</label>
+                                <select class="input-field" id="precip-${stageNum}">
+                                    <option value="none">None</option>
+                                    <option value="light">Light rain/snow</option>
+                                    <option value="heavy">Heavy rain/snow</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Travel Pace -->
+                    <div class="mb-4">
+                        <h4 class="text-lg mb-2">Travel Pace</h4>
+                        <div class="grid grid-cols-3 gap-4">
+                            <label>
+                                <input type="radio" name="pace-${stageNum}" value="fast"> Fast
+                            </label>
+                            <label>
+                                <input type="radio" name="pace-${stageNum}" value="normal" checked> Normal
+                            </label>
+                            <label>
+                                <input type="radio" name="pace-${stageNum}" value="slow"> Slow
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Challenges -->
+                    <div class="mb-4">
+                        <h4 class="text-lg mb-2">Challenges</h4>
+                        <div id="challenges-${stageNum}">
+                            <!-- Challenge entries will be added here -->
+                        </div>
+                        <button class="fancy-button" onclick="addChallenge(${stageNum})">Add Challenge</button>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+                        <h4 class="text-lg mb-2">Narrative Notes</h4>
+                        <textarea class="input-field" id="notes-${stageNum}" rows="3"></textarea>
+                    </div>
+
+                    <!-- Remove Stage Button -->
+                    <button class="fancy-button bg-red-700" onclick="removeStage(${stageNum})">Remove Stage</button>
+                </div>
+            `;
+        }
+
+        // Initialize
+        let stageCount = 0;
+        const terrainData = {
+            arctic: { maxPace: "Fast", note: "Appropriate equipment (such as skis) needed for Fast pace" },
+            coastal: { maxPace: "Normal" },
+            desert: { maxPace: "Normal" },
+            forest: { maxPace: "Normal" },
+            grassland: { maxPace: "Fast" },
+            hill: { maxPace: "Normal" },
+            mountain: { maxPace: "Slow" },
+            swamp: { maxPace: "Slow" },
+            underdark: { maxPace: "Normal" },
+            urban: { maxPace: "Normal" },
+            waterborne: { maxPace: "Special" }
+        };
+
+        // Add initial stage
+        addStage();
+
+        function addStage() {
+            stageCount++;
+            const stagesContainer = document.getElementById('stages-container');
+            stagesContainer.insertAdjacentHTML('beforeend', createStageTemplate(stageCount));
+        }
+
+        function removeStage(stageNum) {
+            const stage = document.getElementById(`stage-${stageNum}`);
+            stage.remove();
+        }
+
+        function addChallenge(stageNum) {
+            const challengesContainer = document.getElementById(`challenges-${stageNum}`);
+            const challengeNum = challengesContainer.children.length + 1;
+            
+            const challengeHTML = `
+                <div class="grid grid-cols-3 gap-4 mb-2">
+                    <select class="input-field" id="challenge-type-${stageNum}-${challengeNum}">
+                        <option value="encounter">Encounter</option>
+                        <option value="obstacle">Obstacle</option>
+                        <option value="navigation">Navigation</option>
+                        <option value="foraging">Foraging</option>
+                        <option value="search">Search</option>
+                    </select>
+                    <input type="number" class="input-field" placeholder="DC (if applicable)" id="challenge-dc-${stageNum}-${challengeNum}">
+                    <input type="text" class="input-field" placeholder="Notes" id="challenge-notes-${stageNum}-${challengeNum}">
+                </div>
+            `;
+            
+            challengesContainer.insertAdjacentHTML('beforeend', challengeHTML);
+        }
+
+        function updateTerrainInfo(stageNum) {
+            const terrain = document.getElementById(`terrain-${stageNum}`).value;
+            const terrainInfo = terrainData[terrain];
+            
+            // Update available pace options based on terrain
+            const paceInputs = document.getElementsByName(`pace-${stageNum}`);
+            paceInputs.forEach(input => {
+                if (input.value === 'fast') {
+                    input.disabled = terrainInfo.maxPace === 'Slow';
+                }
+            });
+        }
+
+        function adjustRations(amount) {
+            const rationsInput = document.getElementById('rations');
+            let currentRations = parseInt(rationsInput.value);
+            rationsInput.value = Math.max(0, currentRations + amount);
+        }
+
+        function saveData() {
+            const data = {
+                origin: document.getElementById('origin').value,
+                destination: document.getElementById('destination').value,
+                partySize: document.getElementById('partySize').value,
+                rations: document.getElementById('rations').value,
+                stages: []
+            };
+
+            // Collect data from each stage
+            for (let i = 1; i <= stageCount; i++) {
+                const stage = document.getElementById(`stage-${i}`);
+                if (stage) {
+                    // Add stage data collection here
+                }
+            }
+
+            // Save to file
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'travel-plan.json';
+            a.click();
+        }
+
+        function loadData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = JSON.parse(e.target.result);
+                    // Implement data loading logic
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        function exportToMD() {
+            let mdContent = `# Travel Plan\n\n`;
+            mdContent += `## Journey Overview\n`;
+            mdContent += `- Origin: ${document.getElementById('origin').value}\n`;
+            mdContent += `- Destination: ${document.getElementById('destination').value}\n\n`;
