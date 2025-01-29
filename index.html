@@ -15,221 +15,296 @@
             --accent-danger: #8a5c5c;
             --accent-highlight: #ffd700;
             --disabled-text: #8a5c5c;
+            --border-color: #3c5a3e;
         }
 
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--bg-main);
             color: var(--primary-dark);
-            padding: 20px;
             margin: 0;
+            padding: 20px;
         }
 
         .travel-planner {
             max-width: 1000px;
             margin: 0 auto;
-            background-color: var(--bg-content);
-            padding: 20px;
+            background: var(--bg-content);
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
         }
 
-        .header {
+        .planner-header {
             text-align: center;
             margin-bottom: 30px;
-            border-bottom: 2px solid var(--primary-medium);
-            padding-bottom: 15px;
         }
 
-        .header h1 {
+        .planner-header h1 {
             font-family: 'Uncial Antiqua', cursive;
             color: var(--primary-dark);
-            margin: 0;
             font-size: 2.5em;
+            margin: 0;
+            padding: 10px;
+            border-bottom: 2px solid var(--border-color);
         }
 
-        .journey-info {
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .action-button {
+            background: var(--primary-light);
+            color: var(--bg-content);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 0.9em;
+        }
+
+        .action-button:hover {
+            background: var(--primary-medium);
+        }
+
+        .journey-basics {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
-        .journey-info input {
-            width: 100%;
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
             padding: 8px;
-            border: 1px solid var(--primary-medium);
+            border: 1px solid var(--border-color);
             border-radius: 4px;
-            background-color: var(--bg-container);
+            background: var(--bg-container);
+        }
+
+        .party-speed {
+            background: var(--bg-container);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .speed-calculations {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .speed-box {
+            background: var(--bg-content);
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .speed-box h3 {
+            margin: 0 0 10px 0;
+            color: var(--primary-dark);
+            font-family: 'Uncial Antiqua', cursive;
         }
 
         .stage {
-            background-color: var(--bg-container);
+            background: var(--bg-container);
             border: 2px solid var(--primary-medium);
             border-radius: 8px;
             margin-bottom: 20px;
-            padding: 15px;
+            overflow: hidden;
         }
 
         .stage-header {
-            background-color: rgba(92, 138, 95, 0.2);
-            padding: 10px;
-            margin: -15px -15px 15px -15px;
-            border-radius: 6px 6px 0 0;
+            background: rgba(92, 138, 95, 0.2);
+            padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .stage-header h2 {
-            margin: 0;
             font-family: 'Uncial Antiqua', cursive;
-            color: var(--primary-dark);
+            margin: 0;
         }
 
         .stage-content {
-            display: grid;
-            grid-template-columns: 3fr 2fr;
-            gap: 20px;
+            padding: 20px;
         }
 
-        .stage-info {
+        .stage-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .travel-times {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .time-box {
+            background: var(--bg-content);
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .time-box.disabled {
+            color: var(--disabled-text);
+            background: rgba(138, 92, 92, 0.1);
+        }
+
+        .terrain-info {
+            background: var(--bg-content);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        .notes-challenges {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        .stage-info label {
-            font-weight: bold;
-        }
-
-        .stage-info input,
-        .stage-info select {
+        .notes-section textarea,
+        .challenges-section textarea {
             width: 100%;
-            padding: 6px;
-            border: 1px solid var(--primary-medium);
+            min-height: 120px;
+            padding: 8px;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
-            background-color: var(--bg-content);
+            background: var(--bg-content);
+            resize: vertical;
         }
 
-        .pace-options {
+        .weather-controls {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
 
-        .pace-option {
-            text-align: center;
-            padding: 10px;
-            background-color: var(--bg-content);
-            border: 1px solid var(--primary-medium);
+        .challenges-list {
+            margin-top: 10px;
+        }
+
+        .challenge-item {
+            background: var(--bg-content);
+            border: 1px solid var(--border-color);
             border-radius: 4px;
-        }
-
-        .pace-option.disabled {
-            color: var(--disabled-text);
-            background-color: rgba(138, 92, 92, 0.1);
-        }
-
-        .notes-section,
-        .challenges-section {
-            margin-top: 15px;
+            margin-bottom: 10px;
             padding: 10px;
-            background-color: var(--bg-content);
-            border-radius: 4px;
         }
 
-        .notes-section textarea {
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .delete-button {
+            background: var(--accent-danger);
+            color: var(--bg-content);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        select {
             width: 100%;
-            min-height: 100px;
             padding: 8px;
-            border: 1px solid var(--primary-medium);
+            border: 1px solid var(--border-color);
             border-radius: 4px;
-            background-color: var(--bg-content);
-            resize: vertical;
+            background: var(--bg-content);
         }
 
         .elapsed-time {
             text-align: right;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
-        .add-stage-btn {
+        .add-stage-button {
             width: 100%;
-            padding: 10px;
-            margin-top: 20px;
-            background-color: var(--primary-light);
+            padding: 15px;
+            background: var(--primary-light);
             color: var(--bg-content);
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-family: 'Uncial Antiqua', cursive;
-            transition: background-color 0.3s;
+            margin-top: 20px;
         }
 
-        .add-stage-btn:hover {
-            background-color: var(--primary-medium);
-        }
-
-        .delete-stage-btn {
-            background-color: var(--accent-danger);
-            color: var(--bg-content);
-            border: none;
-            border-radius: 4px;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-
-        .reference-section {
-            margin-top: 30px;
-            padding: 15px;
-            background-color: var(--bg-container);
-            border-radius: 8px;
-        }
-
-        .reference-header {
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: var(--primary-light);
-            color: var(--bg-content);
-            border-radius: 4px;
-        }
-
-        .reference-content {
-            padding: 15px;
-            display: none;
-        }
-
-        .reference-content.show {
-            display: block;
-        }
-
-        .dc-display {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: var(--bg-content);
-            border-radius: 4px;
+        .add-stage-button:hover {
+            background: var(--primary-medium);
         }
     </style>
 </head>
 <body>
     <div class="travel-planner">
-        <div class="header">
+        <div class="planner-header">
             <h1>Travel Planner</h1>
         </div>
 
-        <div class="journey-info">
-            <div>
+        <div class="action-buttons">
+            <button class="action-button" onclick="saveJourney()">Save Journey</button>
+            <button class="action-button" onclick="loadJourney()">Load Journey</button>
+            <button class="action-button" onclick="exportToMarkdown()">Export to Markdown</button>
+        </div>
+
+        <div class="journey-basics">
+            <div class="input-group">
                 <label for="origin">Origin:</label>
                 <input type="text" id="origin">
             </div>
-            <div>
+            <div class="input-group">
                 <label for="destination">Destination:</label>
                 <input type="text" id="destination">
+            </div>
+        </div>
+
+        <div class="party-speed">
+            <div class="input-group">
+                <label for="party-speed">Fastest Party Member's Speed (feet):</label>
+                <input type="number" id="party-speed" onchange="updateBaseSpeeds()" min="0" step="5">
+            </div>
+            <div class="speed-calculations">
+                <div class="speed-box">
+                    <h3>Normal Pace</h3>
+                    <div id="normal-base">-- miles/day</div>
+                </div>
+                <div class="speed-box">
+                    <h3>Fast Pace</h3>
+                    <div id="fast-base">-- miles/day</div>
+                </div>
+                <div class="speed-box">
+                    <h3>Slow Pace</h3>
+                    <div id="slow-base">-- miles/day</div>
+                </div>
             </div>
         </div>
 
@@ -237,43 +312,33 @@
             <!-- Stages will be dynamically added here -->
         </div>
 
-        <button class="add-stage-btn" onclick="addStage()">Add New Stage</button>
-
-        <div class="reference-section">
-            <div class="reference-header" onclick="toggleReference()">
-                <h3>Travel Rules Reference</h3>
-                <span class="toggle-icon">▼</span>
-            </div>
-            <div class="reference-content" id="reference-content">
-                <!-- Reference content will be added here -->
-            </div>
-        </div>
+        <button class="add-stage-button" onclick="addStage()">Add New Stage</button>
     </div>
 
     <script>
-        // Stage template function will go here
+        // Stage template function
         function createStageTemplate(stageNum) {
             return `
                 <div class="stage" id="stage-${stageNum}">
                     <div class="stage-header">
                         <h2>Stage ${stageNum}</h2>
-                        <button class="delete-stage-btn" onclick="deleteStage(${stageNum})">Delete Stage</button>
+                        <button class="delete-button" onclick="deleteStage(${stageNum})">Delete Stage</button>
                     </div>
                     <div class="stage-content">
-                        <div class="stage-info">
-                            <div>
+                        <div class="stage-grid">
+                            <div class="input-group">
                                 <label for="start-${stageNum}">Start:</label>
                                 <input type="text" id="start-${stageNum}">
                             </div>
-                            <div>
+                            <div class="input-group">
                                 <label for="end-${stageNum}">End:</label>
                                 <input type="text" id="end-${stageNum}">
                             </div>
-                            <div>
-                                <label for="distance-${stageNum}">Distance:</label>
-                                <input type="number" id="distance-${stageNum}" onchange="updateTravelTimes(${stageNum})">
+                            <div class="input-group">
+                                <label for="distance-${stageNum}">Distance (miles):</label>
+                                <input type="number" id="distance-${stageNum}" onchange="updateTravelTimes(${stageNum})" min="0">
                             </div>
-                            <div>
+                            <div class="input-group">
                                 <label for="terrain-${stageNum}">Terrain:</label>
                                 <select id="terrain-${stageNum}" onchange="updateTerrainInfo(${stageNum})">
                                     <option value="arctic">Arctic</option>
@@ -289,59 +354,79 @@
                                     <option value="waterborne">Waterborne</option>
                                 </select>
                             </div>
-                            <div>
+                            <div class="input-group">
                                 <label for="rations-${stageNum}">Available Rations:</label>
                                 <input type="number" id="rations-${stageNum}" min="0">
                             </div>
-                            <div>
-                                <label>Weather:</label>
-                                <select id="weather-${stageNum}">
-                                    <option value="normal">Normal for season</option>
-                                    <option value="cold">Colder (1d4 × 10°F)</option>
-                                    <option value="hot">Hotter (1d4 × 10°F)</option>
+                            <div class="weather-controls">
+                                <div class="input-group">
+                                    <label>Temperature:</label>
+                                    <select id="temp-${stageNum}">
+                                        <option value="normal">Normal for season</option>
+                                        <option value="cold">Colder (1d4 × 10°F)</option>
+                                        <option value="hot">Hotter (1d4 × 10°F)</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Wind:</label>
+                                    <select id="wind-${stageNum}">
+                                        <option value="none">None</option>
+                                        <option value="light">Light</option>
+                                        <option value="strong">Strong</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Precipitation:</label>
+                                    <select id="precip-${stageNum}">
+                                        <option value="none">None</option>
+                                        <option value="light">Light</option>
+                                        <option value="heavy">Heavy</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="travel-times">
+                            <div class="time-box" id="fast-${stageNum}">
+                                <h3>Fast</h3>
+                                <div class="time">-- days/hrs</div>
+                            </div>
+                            <div class="time-box" id="normal-${stageNum}">
+                                <h3>Normal</h3>
+                                <div class="time">-- days/hrs</div>
+                            </div>
+                            <div class="time-box" id="slow-${stageNum}">
+                                <h3>Slow</h3>
+                                <div class="time">-- days/hrs</div>
+                            </div>
+                        </div>
+
+                        <div class="terrain-info" id="terrain-info-${stageNum}">
+                            <!-- Terrain DCs will be displayed here -->
+                        </div>
+
+                        <div class="notes-challenges">
+                            <div class="notes-section">
+                                <label for="notes-${stageNum}">Narrative Notes:</label>
+                                <textarea id="notes-${stageNum}"></textarea>
+                            </div>
+                            <div class="challenges-section">
+                                <label>Challenges:</label>
+                                <select id="challenge-type-${stageNum}" onchange="addChallenge(${stageNum})">
+                                    <option value="">Select a challenge...</option>
+                                    <option value="damage">Damage</option>
+                                    <option value="exhaustion">Exhaustion</option>
+                                    <option value="condition">Another Condition</option>
+                                    <option value="ambush">Ambush</option>
+                                    <option value="attack">Attack from Above</option>
+                                    <option value="distant">Distant Sighting</option>
+                                    <option value="found">Found by Chance</option>
+                                    <option value="pursuit">Pursuit</option>
                                 </select>
+                                <div id="challenges-list-${stageNum}" class="challenges-list"></div>
                             </div>
                         </div>
-                        <div class="pace-container">
-                            <div class="pace-options">
-                                <div class="pace-option" id="fast-${stageNum}">
-                                    <div>Fast</div>
-                                    <div class="time">-- days/hrs</div>
-                                </div>
-                                <div class="pace-option" id="normal-${stageNum}">
-                                    <div>Normal</div>
-                                    <div class="time">-- days/hrs</div>
-                                </div>
-                                <div class="pace-option" id="slow-${stageNum}">
-                                    <div>Slow</div>
-                                    <div class="time">-- days/hrs</div>
-                                </div>
-                            </div>
-                            <div class="dc-display" id="dc-display-${stageNum}">
-                                <!-- DCs will be displayed here -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stage-bottom">
-                        <div class="notes-section">
-                            <label for="notes-${stageNum}">Narrative Notes:</label>
-                            <textarea id="notes-${stageNum}"></textarea>
-                        </div>
-                        <div class="challenges-section">
-                            <label>Challenges:</label>
-                            <select id="challenge-type-${stageNum}" onchange="addChallenge(${stageNum})">
-                                <option value="">Select a challenge...</option>
-                                <option value="damage">Damage</option>
-                                <option value="exhaustion">Exhaustion</option>
-                                <option value="condition">Another Condition</option>
-                                <option value="ambush">Ambush</option>
-                                <option value="attack">Attack from Above</option>
-                                <option value="distant">Distant Sighting</option>
-                                <option value="found">Found by Chance</option>
-                                <option value="pursuit">Pursuit</option>
-                            </select>
-                            <div id="challenges-list-${stageNum}" class="challenges-list"></div>
-                        </div>
+
                         <div class="elapsed-time">
                             <label>Elapsed Time:</label>
                             <input type="text" id="elapsed-${stageNum}" readonly>
@@ -351,10 +436,7 @@
             `;
         }
 
-        // Initial stage
-        let stageCount = 0;
-        addStage();
-        // Terrain data with restrictions and DCs
+        // Terrain data
         const terrainData = {
             arctic: { 
                 maxPace: "fast", 
@@ -437,12 +519,33 @@
             }
         };
 
-        // Travel pace calculations (miles per day)
-        const paceSpeeds = {
-            fast: 30,
-            normal: 24,
-            slow: 18
+        let stageCount = 0;
+        let baseSpeeds = {
+            normal: 0,
+            fast: 0,
+            slow: 0
         };
+
+        // Calculate base travel speeds based on party speed
+        function updateBaseSpeeds() {
+            const partySpeed = parseFloat(document.getElementById('party-speed').value) || 0;
+            const milesPerHour = partySpeed / 10;
+            
+            // Calculate base speeds
+            baseSpeeds.normal = milesPerHour * 8;
+            baseSpeeds.fast = baseSpeeds.normal * 1.333;
+            baseSpeeds.slow = baseSpeeds.normal * 0.667;
+
+            // Update display
+            document.getElementById('normal-base').textContent = `${baseSpeeds.normal.toFixed(1)} miles/day`;
+            document.getElementById('fast-base').textContent = `${baseSpeeds.fast.toFixed(1)} miles/day`;
+            document.getElementById('slow-base').textContent = `${baseSpeeds.slow.toFixed(1)} miles/day`;
+
+            // Update all existing stages
+            for (let i = 1; i <= stageCount; i++) {
+                updateTravelTimes(i);
+            }
+        }
 
         function addStage() {
             stageCount++;
@@ -465,17 +568,16 @@
             updatePaceOptions(stageNum, terrainInfo.maxPace);
             
             // Update DC display
-            const dcDisplay = document.getElementById(`dc-display-${stageNum}`);
-            dcDisplay.innerHTML = `
-                <strong>Terrain DCs:</strong><br>
-                Foraging: ${terrainInfo.foragingDC}<br>
-                Navigation: ${terrainInfo.navigationDC}<br>
-                Search: ${terrainInfo.searchDC}<br>
-                Encounter Distance: ${terrainInfo.encounterDistance}
-                ${terrainInfo.note ? `<br><em>${terrainInfo.note}</em>` : ''}
+            const terrainInfoDisplay = document.getElementById(`terrain-info-${stageNum}`);
+            terrainInfoDisplay.innerHTML = `
+                <strong>Terrain Information:</strong><br>
+                • Foraging DC: ${terrainInfo.foragingDC}<br>
+                • Navigation DC: ${terrainInfo.navigationDC}<br>
+                • Search DC: ${terrainInfo.searchDC}<br>
+                • Encounter Distance: ${terrainInfo.encounterDistance}
+                ${terrainInfo.note ? `<br>• Note: ${terrainInfo.note}` : ''}
             `;
 
-            // Update travel times
             updateTravelTimes(stageNum);
         }
 
@@ -484,13 +586,13 @@
             const maxPaceIndex = paces.indexOf(maxPace);
             
             paces.forEach((pace, index) => {
-                const paceElement = document.getElementById(`${pace}-${stageNum}`);
+                const timeBox = document.getElementById(`${pace}-${stageNum}`);
                 if (maxPace === 'special') {
-                    paceElement.classList.add('disabled');
+                    timeBox.classList.add('disabled');
                 } else if (index <= maxPaceIndex) {
-                    paceElement.classList.remove('disabled');
+                    timeBox.classList.remove('disabled');
                 } else {
-                    paceElement.classList.add('disabled');
+                    timeBox.classList.add('disabled');
                 }
             });
         }
@@ -500,14 +602,16 @@
             const terrain = document.getElementById(`terrain-${stageNum}`).value;
             
             if (terrainData[terrain].maxPace !== 'special') {
-                Object.entries(paceSpeeds).forEach(([pace, speed]) => {
-                    const timeElement = document.querySelector(`#${pace}-${stageNum} .time`);
-                    const days = distance / speed;
-                    const fullDays = Math.floor(days);
-                    const hours = Math.round((days - fullDays) * 8);
-                    timeElement.textContent = hours > 0 ? 
-                        `${fullDays} days, ${hours} hrs` : 
-                        `${fullDays} days`;
+                Object.entries(baseSpeeds).forEach(([pace, speed]) => {
+                    if (speed > 0) {
+                        const timeElement = document.querySelector(`#${pace}-${stageNum} .time`);
+                        const days = distance / speed;
+                        const fullDays = Math.floor(days);
+                        const hours = Math.round((days - fullDays) * 8);
+                        timeElement.textContent = hours > 0 ? 
+                            `${fullDays} days, ${hours} hrs` : 
+                            `${fullDays} days`;
+                    }
                 });
             }
         }
@@ -524,46 +628,211 @@
             let challengeContent = `
                 <div class="challenge-header">
                     ${challengeType.charAt(0).toUpperCase() + challengeType.slice(1)}
-                    <button onclick="this.parentElement.parentElement.remove()">×</button>
+                    <button class="delete-button" onclick="this.parentElement.parentElement.remove()">×</button>
                 </div>
                 <textarea placeholder="Add notes about this challenge..."></textarea>
             `;
             
             challengeDiv.innerHTML = challengeContent;
             challengesList.appendChild(challengeDiv);
-            select.value = ''; // Reset select
+            select.value = '';
         }
 
-        function toggleReference() {
-            const content = document.getElementById('reference-content');
-            content.classList.toggle('show');
-            
-            if (content.classList.contains('show')) {
-                content.innerHTML = `
-                    <h4>Extended Travel Rules</h4>
-                    <ul>
-                        <li>Characters can push beyond 8 hours of travel per day</li>
-                        <li>Each additional hour requires a DC 10 + 1 per extra hour Constitution save</li>
-                        <li>Failing the save results in one level of exhaustion</li>
-                    </ul>
+        // Initialize first stage
+        addStage();
+        function saveJourney() {
+            const journeyData = {
+                origin: document.getElementById('origin').value,
+                destination: document.getElementById('destination').value,
+                partySpeed: document.getElementById('party-speed').value,
+                baseSpeeds: baseSpeeds,
+                stages: []
+            };
 
-                    <h4>Special Movement</h4>
-                    <ul>
-                        <li>Miles per hour = Speed ÷ 10</li>
-                        <li>Miles per day (Normal pace) = Miles per hour × hours traveled (typically 8)</li>
-                        <li>Fast pace = Miles per day × 1⅓</li>
-                        <li>Slow pace = Miles per day × ⅔</li>
-                    </ul>
-
-                    <h4>Weather Effects</h4>
-                    <ul>
-                        <li>Temperature affects survival checks and exhaustion</li>
-                        <li>Strong winds can impact ranged attacks and flight</li>
-                        <li>Heavy precipitation can obscure vision and affect tracking</li>
-                    </ul>
-                `;
+            // Collect data from each stage
+            for (let i = 1; i <= stageCount; i++) {
+                const stage = document.getElementById(`stage-${i}`);
+                if (stage) {
+                    const stageData = {
+                        start: document.getElementById(`start-${i}`).value,
+                        end: document.getElementById(`end-${i}`).value,
+                        distance: document.getElementById(`distance-${i}`).value,
+                        terrain: document.getElementById(`terrain-${i}`).value,
+                        rations: document.getElementById(`rations-${i}`).value,
+                        weather: {
+                            temperature: document.getElementById(`temp-${i}`).value,
+                            wind: document.getElementById(`wind-${i}`).value,
+                            precipitation: document.getElementById(`precip-${i}`).value
+                        },
+                        notes: document.getElementById(`notes-${i}`).value,
+                        challenges: Array.from(document.getElementById(`challenges-list-${i}`).children).map(challenge => ({
+                            type: challenge.querySelector('.challenge-header').textContent.trim().split('×')[0].trim(),
+                            notes: challenge.querySelector('textarea').value
+                        })),
+                        elapsedTime: document.getElementById(`elapsed-${i}`).value
+                    };
+                    journeyData.stages.push(stageData);
+                }
             }
+
+            // Create and download JSON file
+            const blob = new Blob([JSON.stringify(journeyData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'journey-plan.json';
+            a.click();
+            URL.revokeObjectURL(url);
         }
-    </script>
+
+        function loadJourney() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = async function(e) {
+                try {
+                    const file = e.target.files[0];
+                    const text = await file.text();
+                    const journeyData = JSON.parse(text);
+                    
+                    // Clear existing stages
+                    document.getElementById('stages-container').innerHTML = '';
+                    stageCount = 0;
+                    
+                    // Load basic info
+                    document.getElementById('origin').value = journeyData.origin;
+                    document.getElementById('destination').value = journeyData.destination;
+                    document.getElementById('party-speed').value = journeyData.partySpeed;
+                    baseSpeeds = journeyData.baseSpeeds;
+                    updateBaseSpeeds();
+                    
+                    // Load stages
+                    journeyData.stages.forEach((stageData, index) => {
+                        addStage();
+                        const i = index + 1;
+                        
+                        document.getElementById(`start-${i}`).value = stageData.start;
+                        document.getElementById(`end-${i}`).value = stageData.end;
+                        document.getElementById(`distance-${i}`).value = stageData.distance;
+                        document.getElementById(`terrain-${i}`).value = stageData.terrain;
+                        document.getElementById(`rations-${i}`).value = stageData.rations;
+                        
+                        // Weather
+                        document.getElementById(`temp-${i}`).value = stageData.weather.temperature;
+                        document.getElementById(`wind-${i}`).value = stageData.weather.wind;
+                        document.getElementById(`precip-${i}`).value = stageData.weather.precipitation;
+                        
+                        // Notes
+                        document.getElementById(`notes-${i}`).value = stageData.notes;
+                        
+                        // Challenges
+                        stageData.challenges.forEach(challenge => {
+                            const select = document.getElementById(`challenge-type-${i}`);
+                            select.value = challenge.type.toLowerCase();
+                            addChallenge(i);
+                            const lastChallenge = document.getElementById(`challenges-list-${i}`).lastElementChild;
+                            lastChallenge.querySelector('textarea').value = challenge.notes;
+                        });
+                        
+                        document.getElementById(`elapsed-${i}`).value = stageData.elapsedTime;
+                        updateTerrainInfo(i);
+                    });
+                } catch (error) {
+                    alert('Error loading journey data: ' + error.message);
+                }
+            };
+            
+            input.click();
+        }
+
+        function exportToMarkdown() {
+            let mdContent = `# Journey Plan\n\n`;
+            
+            // Basic Information
+            mdContent += `## Journey Overview\n`;
+            mdContent += `- **Origin:** ${document.getElementById('origin').value}\n`;
+            mdContent += `- **Destination:** ${document.getElementById('destination').value}\n`;
+            mdContent += `- **Party Speed:** ${document.getElementById('party-speed').value} feet\n\n`;
+
+            // Base Travel Speeds
+            mdContent += `## Base Travel Speeds\n`;
+            mdContent += `- **Normal Pace:** ${baseSpeeds.normal.toFixed(1)} miles/day\n`;
+            mdContent += `- **Fast Pace:** ${baseSpeeds.fast.toFixed(1)} miles/day\n`;
+            mdContent += `- **Slow Pace:** ${baseSpeeds.slow.toFixed(1)} miles/day\n\n`;
+            
+            // Stages
+            for (let i = 1; i <= stageCount; i++) {
+                const stage = document.getElementById(`stage-${i}`);
+                if (stage) {
+                    mdContent += `## Stage ${i}\n\n`;
+                    
+                    // Route Information
+                    mdContent += `### Route Information\n`;
+                    mdContent += `- **Start:** ${document.getElementById(`start-${i}`).value}\n`;
+                    mdContent += `- **End:** ${document.getElementById(`end-${i}`).value}\n`;
+                    mdContent += `- **Distance:** ${document.getElementById(`distance-${i}`).value} miles\n`;
+                    mdContent += `- **Terrain:** ${document.getElementById(`terrain-${i}`).value}\n`;
+                    mdContent += `- **Available Rations:** ${document.getElementById(`rations-${i}`).value}\n\n`;
+                    
+                    // Weather
+                    mdContent += `### Weather Conditions\n`;
+                    mdContent += `- **Temperature:** ${document.getElementById(`temp-${i}`).value}\n`;
+                    mdContent += `- **Wind:** ${document.getElementById(`wind-${i}`).value}\n`;
+                    mdContent += `- **Precipitation:** ${document.getElementById(`precip-${i}`).value}\n\n`;
+                    
+                    // Travel Times
+                    mdContent += `### Travel Times\n`;
+                    const terrain = terrainData[document.getElementById(`terrain-${i}`).value];
+                    if (terrain.maxPace !== 'special') {
+                        ['fast', 'normal', 'slow'].forEach(pace => {
+                            const timeElement = document.querySelector(`#${pace}-${i} .time`);
+                            mdContent += `- **${pace.charAt(0).toUpperCase() + pace.slice(1)}:** ${timeElement.textContent}\n`;
+                        });
+                    } else {
+                        mdContent += `*Special: Travel pace depends on vehicle*\n`;
+                    }
+                    mdContent += '\n';
+                    
+                    // Terrain Information
+                    mdContent += `### Terrain DCs\n`;
+                    mdContent += `- **Foraging DC:** ${terrain.foragingDC}\n`;
+                    mdContent += `- **Navigation DC:** ${terrain.navigationDC}\n`;
+                    mdContent += `- **Search DC:** ${terrain.searchDC}\n`;
+                    mdContent += `- **Encounter Distance:** ${terrain.encounterDistance}\n`;
+                    if (terrain.note) mdContent += `- **Note:** ${terrain.note}\n`;
+                    mdContent += '\n';
+                    
+                    // Challenges
+                    const challengesList = document.getElementById(`challenges-list-${i}`);
+                    if (challengesList.children.length > 0) {
+                        mdContent += `### Challenges\n`;
+                        Array.from(challengesList.children).forEach((challenge, index) => {
+                            const type = challenge.querySelector('.challenge-header').textContent.trim().split('×')[0].trim();
+                            const notes = challenge.querySelector('textarea').value;
+                            mdContent += `#### ${type}\n${notes}\n\n`;
+                        });
+                    }
+                    
+                    // Narrative Notes
+                    const notes = document.getElementById(`notes-${i}`).value;
+                    if (notes) {
+                        mdContent += `### Narrative Notes\n${notes}\n\n`;
+                    }
+                    
+                    mdContent += `---\n\n`;
+                }
+            }
+
+            // Create and download MD file
+            const blob = new Blob([mdContent], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'journey-plan.md';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        </script>
 </body>
 </html>
