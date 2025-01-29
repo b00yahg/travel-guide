@@ -752,71 +752,82 @@
         }
 
         function exportToMarkdown() {
-            let mdContent = `# Journey Plan\n\n`;
+            let mdContent = `# Journey Plan: [[${document.getElementById('origin').value}]] to [[${document.getElementById('destination').value}]]\n`;
+            mdContent += `*Created: ${new Date().toISOString().split('T')[0]}*\n\n`;
             
-            // Basic Information
-            mdContent += `## Journey Overview\n`;
-            mdContent += `- **Origin:** ${document.getElementById('origin').value}\n`;
-            mdContent += `- **Destination:** ${document.getElementById('destination').value}\n`;
-            mdContent += `- **Party Speed:** ${document.getElementById('party-speed').value} feet\n\n`;
-
+            // Journey Overview
+            mdContent += `> [!info] Journey Overview\n`;
+            mdContent += `> **Party Speed:** ${document.getElementById('party-speed').value} feet\n`;
+            mdContent += `> **Total Distance:** ${calculateTotalDistance()} miles\n`;
+            mdContent += `> **Estimated Duration:** ${calculateTotalDuration()}\n`;
+            mdContent += `> **Required Rations:** ${calculateTotalRations()}\n\n`;
+            
             // Base Travel Speeds
             mdContent += `## Base Travel Speeds\n`;
-            mdContent += `- **Normal Pace:** ${baseSpeeds.normal.toFixed(1)} miles/day\n`;
-            mdContent += `- **Fast Pace:** ${baseSpeeds.fast.toFixed(1)} miles/day\n`;
-            mdContent += `- **Slow Pace:** ${baseSpeeds.slow.toFixed(1)} miles/day\n\n`;
+            mdContent += `| Pace | Speed (miles/day) |\n`;
+            mdContent += `|------|------------------|\n`;
+            mdContent += `| Fast | ${baseSpeeds.fast.toFixed(1)} |\n`;
+            mdContent += `| Normal | ${baseSpeeds.normal.toFixed(1)} |\n`;
+            mdContent += `| Slow | ${baseSpeeds.slow.toFixed(1)} |\n\n`;
             
             // Stages
             for (let i = 1; i <= stageCount; i++) {
                 const stage = document.getElementById(`stage-${i}`);
                 if (stage) {
-                    mdContent += `## Stage ${i}\n\n`;
+                    const terrain = terrainData[document.getElementById(`terrain-${i}`).value];
+                    
+                    mdContent += `## Stage ${i}: [[${document.getElementById(`start-${i}`).value}]] to [[${document.getElementById(`end-${i}`).value}]]\n\n`;
+                    
+                    // Travel Time Table
+                    mdContent += `### Travel Time\n`;
+                    mdContent += `| Fast | Normal | Slow |\n`;
+                    mdContent += `|:---:|:---:|:---:|\n`;
+                    if (terrain.maxPace !== 'special') {
+                        const fastTime = document.querySelector(`#fast-${i} .time`).textContent;
+                        const normalTime = document.querySelector(`#normal-${i} .time`).textContent;
+                        const slowTime = document.querySelector(`#slow-${i} .time`).textContent;
+                        mdContent += `| **${fastTime}** | **${normalTime}** | **${slowTime}** |\n\n`;
+                    } else {
+                        mdContent += `| *Special: Travel pace depends on vehicle* | | |\n\n`;
+                    }
                     
                     // Route Information
                     mdContent += `### Route Information\n`;
-                    mdContent += `- **Start:** ${document.getElementById(`start-${i}`).value}\n`;
-                    mdContent += `- **End:** ${document.getElementById(`end-${i}`).value}\n`;
-                    mdContent += `- **Distance:** ${document.getElementById(`distance-${i}`).value} miles\n`;
-                    mdContent += `- **Terrain:** ${document.getElementById(`terrain-${i}`).value}\n`;
-                    mdContent += `- **Available Rations:** ${document.getElementById(`rations-${i}`).value}\n\n`;
+                    mdContent += `> [!note] Route Details\n`;
+                    mdContent += `> **Distance:** ${document.getElementById(`distance-${i}`).value} miles\n`;
+                    mdContent += `> **Available Rations:** ${document.getElementById(`rations-${i}`).value}\n\n`;
                     
-                    // Weather
+                    // Terrain & Navigation
+                    mdContent += `### Terrain & Navigation\n`;
+                    mdContent += `> [!example] ${document.getElementById(`terrain-${i}`).value} Terrain\n`;
+                    mdContent += `> **Movement Considerations:**\n`;
+                    if (terrain.note) mdContent += `> - ${terrain.note}\n`;
+                    mdContent += `> \n`;
+                    mdContent += `> **Difficulty Checks**\n`;
+                    mdContent += `> - Foraging: DC ${terrain.foragingDC}\n`;
+                    mdContent += `> - Navigation: DC ${terrain.navigationDC}\n`;
+                    mdContent += `> - Search: DC ${terrain.searchDC}\n`;
+                    mdContent += `> \n`;
+                    mdContent += `> **Encounter Distance:** ${terrain.encounterDistance}\n\n`;
+                    
+                    // Weather Conditions
                     mdContent += `### Weather Conditions\n`;
-                    mdContent += `- **Temperature:** ${document.getElementById(`temp-${i}`).value}\n`;
-                    mdContent += `- **Wind:** ${document.getElementById(`wind-${i}`).value}\n`;
-                    mdContent += `- **Precipitation:** ${document.getElementById(`precip-${i}`).value}\n\n`;
-                    
-                    // Travel Times
-                    mdContent += `### Travel Times\n`;
-                    const terrain = terrainData[document.getElementById(`terrain-${i}`).value];
-                    if (terrain.maxPace !== 'special') {
-                        ['fast', 'normal', 'slow'].forEach(pace => {
-                            const timeElement = document.querySelector(`#${pace}-${i} .time`);
-                            mdContent += `- **${pace.charAt(0).toUpperCase() + pace.slice(1)}:** ${timeElement.textContent}\n`;
-                        });
-                    } else {
-                        mdContent += `*Special: Travel pace depends on vehicle*\n`;
-                    }
-                    mdContent += '\n';
-                    
-                    // Terrain Information
-                    mdContent += `### Terrain DCs\n`;
-                    mdContent += `- **Foraging DC:** ${terrain.foragingDC}\n`;
-                    mdContent += `- **Navigation DC:** ${terrain.navigationDC}\n`;
-                    mdContent += `- **Search DC:** ${terrain.searchDC}\n`;
-                    mdContent += `- **Encounter Distance:** ${terrain.encounterDistance}\n`;
-                    if (terrain.note) mdContent += `- **Note:** ${terrain.note}\n`;
-                    mdContent += '\n';
+                    mdContent += `| Condition | Status |\n`;
+                    mdContent += `|-----------|--------|\n`;
+                    mdContent += `| Temperature | ${document.getElementById(`temp-${i}`).value} |\n`;
+                    mdContent += `| Wind | ${document.getElementById(`wind-${i}`).value} |\n`;
+                    mdContent += `| Precipitation | ${document.getElementById(`precip-${i}`).value} |\n\n`;
                     
                     // Challenges
                     const challengesList = document.getElementById(`challenges-list-${i}`);
                     if (challengesList.children.length > 0) {
                         mdContent += `### Challenges\n`;
-                        Array.from(challengesList.children).forEach((challenge, index) => {
+                        Array.from(challengesList.children).forEach((challenge) => {
                             const type = challenge.querySelector('.challenge-header').textContent.trim().split('×')[0].trim();
                             const notes = challenge.querySelector('textarea').value;
-                            mdContent += `#### ${type}\n${notes}\n\n`;
+                            mdContent += `- [ ] ${type}: ${notes}\n`;
                         });
+                        mdContent += '\n';
                     }
                     
                     // Narrative Notes
@@ -828,7 +839,7 @@
                     mdContent += `---\n\n`;
                 }
             }
-
+            
             // Create and download MD file
             const blob = new Blob([mdContent], { type: 'text/markdown' });
             const url = URL.createObjectURL(blob);
@@ -837,6 +848,42 @@
             a.download = 'journey-plan.md';
             a.click();
             URL.revokeObjectURL(url);
+        }
+        
+        // Helper functions for calculations
+        function calculateTotalDistance() {
+            let total = 0;
+            for (let i = 1; i <= stageCount; i++) {
+                const distance = document.getElementById(`distance-${i}`);
+                if (distance && distance.value) {
+                    total += parseFloat(distance.value);
+                }
+            }
+            return total.toFixed(1);
+        }
+        
+        function calculateTotalDuration() {
+            let total = 0;
+            for (let i = 1; i <= stageCount; i++) {
+                const normalTime = document.querySelector(`#normal-${i} .time`);
+                if (normalTime) {
+                    const timeStr = normalTime.textContent;
+                    const [days, hours] = timeStr.split(' ')[0].split('/');
+                    total += parseFloat(days) + (hours ? parseFloat(hours) / 24 : 0);
+                }
+            }
+            return `${Math.floor(total)} days, ${Math.round((total % 1) * 24)} hours`;
+        }
+        
+        function calculateTotalRations() {
+            let total = 0;
+            for (let i = 1; i <= stageCount; i++) {
+                const rations = document.getElementById(`rations-${i}`);
+                if (rations && rations.value) {
+                    total += parseFloat(rations.value);
+                }
+            }
+            return total.toFixed(1);
         }
         </script>
 </body>
