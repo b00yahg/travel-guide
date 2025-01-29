@@ -334,8 +334,43 @@
                 }
             }
 
+            // Collect all stage data
+            for (let i = 1; i <= stageCount; i++) {
+                const stage = document.getElementById(`stage-${i}`);
+                if (stage) {
+                    const stageData = {
+                        start: document.getElementById(`start-${i}`).value,
+                        end: document.getElementById(`end-${i}`).value,
+                        distance: document.getElementById(`distance-${i}`).value,
+                        terrain: document.getElementById(`terrain-${i}`).value,
+                        weather: {
+                            temperature: document.getElementById(`temp-${i}`).value,
+                            wind: document.getElementById(`wind-${i}`).value,
+                            precipitation: document.getElementById(`precip-${i}`).value
+                        },
+                        pace: Array.from(document.getElementsByName(`pace-${i}`))
+                            .find(radio => radio.checked)?.value,
+                        challenges: [],
+                        notes: document.getElementById(`notes-${i}`).value
+                    };
+
+                    // Collect challenges
+                    const challengesContainer = document.getElementById(`challenges-${i}`);
+                    const challengeCount = challengesContainer.children.length;
+                    for (let j = 1; j <= challengeCount; j++) {
+                        stageData.challenges.push({
+                            type: document.getElementById(`challenge-type-${i}-${j}`).value,
+                            dc: document.getElementById(`challenge-dc-${i}-${j}`).value,
+                            notes: document.getElementById(`challenge-notes-${i}-${j}`).value
+                        });
+                    }
+
+                    data.stages.push(stageData);
+                }
+            }
+
             // Save to file
-            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -352,7 +387,54 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const data = JSON.parse(e.target.result);
-                    // Implement data loading logic
+                    
+                    // Clear existing stages
+                    document.getElementById('stages-container').innerHTML = '';
+                    stageCount = 0;
+                    
+                    // Load basic info
+                    document.getElementById('origin').value = data.origin;
+                    document.getElementById('destination').value = data.destination;
+                    document.getElementById('partySize').value = data.partySize;
+                    document.getElementById('rations').value = data.rations;
+                    
+                    // Load stages
+                    data.stages.forEach((stageData, index) => {
+                        addStage();
+                        const i = index + 1;
+                        
+                        // Fill in stage data
+                        document.getElementById(`start-${i}`).value = stageData.start;
+                        document.getElementById(`end-${i}`).value = stageData.end;
+                        document.getElementById(`distance-${i}`).value = stageData.distance;
+                        document.getElementById(`terrain-${i}`).value = stageData.terrain;
+                        
+                        // Weather
+                        document.getElementById(`temp-${i}`).value = stageData.weather.temperature;
+                        document.getElementById(`wind-${i}`).value = stageData.weather.wind;
+                        document.getElementById(`precip-${i}`).value = stageData.weather.precipitation;
+                        
+                        // Pace
+                        const paceInputs = document.getElementsByName(`pace-${i}`);
+                        paceInputs.forEach(input => {
+                            if (input.value === stageData.pace) input.checked = true;
+                        });
+                        
+                        // Challenges
+                        stageData.challenges.forEach(challenge => {
+                            addChallenge(i);
+                            const j = document.getElementById(`challenges-${i}`).children.length;
+                            document.getElementById(`challenge-type-${i}-${j}`).value = challenge.type;
+                            document.getElementById(`challenge-dc-${i}-${j}`).value = challenge.dc;
+                            document.getElementById(`challenge-notes-${i}-${j}`).value = challenge.notes;
+                        });
+                        
+                        // Notes
+                        document.getElementById(`notes-${i}`).value = stageData.notes;
+                        
+                        // Update terrain-specific information
+                        updateTerrainInfo(i);
+                    });
                 };
                 reader.readAsText(file);
             };
@@ -363,4 +445,78 @@
             let mdContent = `# Travel Plan\n\n`;
             mdContent += `## Journey Overview\n`;
             mdContent += `- Origin: ${document.getElementById('origin').value}\n`;
-            mdContent += `- Destination: ${document.getElementById('destination').value}\n\n`;
+            mdContent += `- Destination: ${document.getElementById('destination').value}\n`;
+            mdContent += `- Party Size: ${document.getElementById('partySize').value}\n`;
+            mdContent += `- Available Rations: ${document.getElementById('rations').value}\n\n`;
+
+            // Add stages
+            for (let i = 1; i <= stageCount; i++) {
+                const stage = document.getElementById(`stage-${i}`);
+                if (stage) {
+                    mdContent += `## Stage ${i}\n\n`;
+                    
+                    // Basic Information
+                    mdContent += `### Route Information\n`;
+                    mdContent += `- Start: ${document.getElementById(`start-${i}`).value}\n`;
+                    mdContent += `- End: ${document.getElementById(`end-${i}`).value}\n`;
+                    mdContent += `- Distance: ${document.getElementById(`distance-${i}`).value} miles\n`;
+                    mdContent += `- Terrain: ${document.getElementById(`terrain-${i}`).value}\n\n`;
+
+                    // Weather
+                    mdContent += `### Weather Conditions\n`;
+                    mdContent += `- Temperature: ${document.getElementById(`temp-${i}`).value}\n`;
+                    mdContent += `- Wind: ${document.getElementById(`wind-${i}`).value}\n`;
+                    mdContent += `- Precipitation: ${document.getElementById(`precip-${i}`).value}\n\n`;
+
+                    // Travel Pace
+                    const paceInputs = document.getElementsByName(`pace-${i}`);
+                    let selectedPace = "";
+                    paceInputs.forEach(input => {
+                        if (input.checked) selectedPace = input.value;
+                    });
+                    mdContent += `### Travel Pace\n- Selected Pace: ${selectedPace}\n\n`;
+
+                    // Challenges
+                    mdContent += `### Challenges\n`;
+                    const challengesContainer = document.getElementById(`challenges-${i}`);
+                    const challengeCount = challengesContainer.children.length;
+                    
+                    for (let j = 1; j <= challengeCount; j++) {
+                        const type = document.getElementById(`challenge-type-${i}-${j}`).value;
+                        const dc = document.getElementById(`challenge-dc-${i}-${j}`).value;
+                        const notes = document.getElementById(`challenge-notes-${i}-${j}`).value;
+                        
+                        mdContent += `#### Challenge ${j}\n`;
+                        mdContent += `- Type: ${type}\n`;
+                        if (dc) mdContent += `- DC: ${dc}\n`;
+                        if (notes) mdContent += `- Notes: ${notes}\n`;
+                        mdContent += '\n';
+                    }
+
+                    // Narrative Notes
+                    const notes = document.getElementById(`notes-${i}`).value;
+                    if (notes) {
+                        mdContent += `### Narrative Notes\n${notes}\n\n`;
+                    }
+
+                    mdContent += `---\n\n`;
+                }
+            }
+
+            // Add reference information
+            mdContent += `## Quick Reference\n\n`;
+            mdContent += `### Terrain Maximum Pace\n`;
+            Object.entries(terrainData).forEach(([terrain, data]) => {
+                mdContent += `- ${terrain.charAt(0).toUpperCase() + terrain.slice(1)}: ${data.maxPace}`;
+                if (data.note) mdContent += ` (${data.note})`;
+                mdContent += '\n';
+            });
+
+            // Create and download the MD file
+            const blob = new Blob([mdContent], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'travel-plan.md';
+            a.click();
+        }
