@@ -387,22 +387,33 @@
                         </div>
 
                         <div class="travel-times">
-                            <div class="time-box" id="fast-${stageNum}">
-                                <h3>Fast</h3>
+                            <div class="time-box" id="slow-${stageNum}">
+                                <h3>Slow</h3>
                                 <div class="time">-- days/hrs</div>
                             </div>
                             <div class="time-box" id="normal-${stageNum}">
                                 <h3>Normal</h3>
                                 <div class="time">-- days/hrs</div>
                             </div>
-                            <div class="time-box" id="slow-${stageNum}">
-                                <h3>Slow</h3>
+                            <div class="time-box" id="fast-${stageNum}">
+                                <h3>Fast</h3>
                                 <div class="time">-- days/hrs</div>
                             </div>
                         </div>
-
-                        <div class="terrain-info" id="terrain-info-${stageNum}">
-                            <!-- Terrain DCs will be displayed here -->
+                        
+                        <div class="travel-times terrain-dcs">
+                            <div class="time-box">
+                                <h3>Foraging DC</h3>
+                                <div id="foraging-${stageNum}">--</div>
+                            </div>
+                            <div class="time-box">
+                                <h3>Navigation DC</h3>
+                                <div id="navigation-${stageNum}">--</div>
+                            </div>
+                            <div class="time-box">
+                                <h3>Search DC</h3>
+                                <div id="search-${stageNum}">--</div>
+                            </div>
                         </div>
 
                         <div class="notes-challenges">
@@ -568,21 +579,15 @@
             updatePaceOptions(stageNum, terrainInfo.maxPace);
             
             // Update DC display
-            const terrainInfoDisplay = document.getElementById(`terrain-info-${stageNum}`);
-            terrainInfoDisplay.innerHTML = `
-                <strong>Terrain Information:</strong><br>
-                • Foraging DC: ${terrainInfo.foragingDC}<br>
-                • Navigation DC: ${terrainInfo.navigationDC}<br>
-                • Search DC: ${terrainInfo.searchDC}<br>
-                • Encounter Distance: ${terrainInfo.encounterDistance}
-                ${terrainInfo.note ? `<br>• Note: ${terrainInfo.note}` : ''}
-            `;
+            document.getElementById(`foraging-${stageNum}`).textContent = terrainInfo.foragingDC;
+            document.getElementById(`navigation-${stageNum}`).textContent = terrainInfo.navigationDC;
+            document.getElementById(`search-${stageNum}`).textContent = terrainInfo.searchDC;
 
             updateTravelTimes(stageNum);
         }
 
         function updatePaceOptions(stageNum, maxPace) {
-            const paces = ['fast', 'normal', 'slow'];
+            const paces = ['slow', 'normal', 'fast'];
             const maxPaceIndex = paces.indexOf(maxPace);
             
             paces.forEach((pace, index) => {
